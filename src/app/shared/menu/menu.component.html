@@ -1,1 +1,7 @@
-<p>menu works!</p>
+<select #pageValue (change)="menuSwitch(pageValue.value)">
+    <option value="home">Főoldal</option>
+    <option value="login">Bejelentkezés</option>
+    <option value="products">Termékek</option>
+    <option value="profile">Profil</option>
+    <option value="signup">Regisztráció</option>
+</select>

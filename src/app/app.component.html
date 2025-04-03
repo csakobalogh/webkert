@@ -1,2 +1,13 @@
-<app-home></app-home>
+<app-menu (selectedPage)="changePage($event)"></app-menu>
+@if (page == "home") {
+    <app-home></app-home>
+} @else if (page === "products") {
+    <app-products></app-products>
+} @else if (page === "login") {
+    <app-login></app-login>
+} @else if (page === "profile") {
+    <app-profile></app-profile>
+} @else if (page === "signup") {
+    <app-signup></app-signup>
+}
 <!-- <router-outlet /> -->
