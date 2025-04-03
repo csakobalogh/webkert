@@ -6,11 +6,10 @@ import { ProductsComponent } from './pages/products/products.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { MenuComponent } from './shared/menu/menu.component';
-import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HomeComponent, LoginComponent, ProductsComponent, ProfileComponent, SignupComponent, MenuComponent, NgIf],
+  imports: [RouterOutlet, HomeComponent, LoginComponent, ProductsComponent, ProfileComponent, SignupComponent, MenuComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
