@@ -1,9 +1,6 @@
-<nav>
-    <ul>
-        <li><a routerLink="/home">Főoldal</a></li>
-        <li><a routerLink="/products">Termékek</a></li>
-        <li><a routerLink="/signup">Regisztráció</a></li>
-        <li><a routerLink="/login">Bejelentkezés</a></li>
-        <li><a routerLink="/profile">Profil</a></li>
-    </ul>
-</nav>
+<mat-nav-list>
+    <a mat-list-item routerLink="/home" routerLinkActive="active-list-item" (click)="closeMenu()">
+        <mat-icon matListItemIcon>home</mat-icon>
+        <span matListItemTitle>Főoldal</span>
+    </a>
+</mat-nav-list>>

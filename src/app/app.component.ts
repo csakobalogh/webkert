@@ -1,23 +1,30 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HomeComponent } from './pages/home/home.component';
-import { LoginComponent } from './pages/login/login.component';
-import { ProductsComponent } from './pages/products/products.component';
-import { ProfileComponent } from './pages/profile/profile.component';
-import { SignupComponent } from './pages/signup/signup.component';
 import { MenuComponent } from './shared/menu/menu.component';
-import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
+import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HomeComponent, LoginComponent, ProductsComponent, ProfileComponent, SignupComponent, MenuComponent, PageNotFoundComponent],
+  imports: [
+    RouterOutlet, 
+    MenuComponent, 
+    MatSidenavModule,
+    MatIconModule,
+    MatToolbarModule,
+    MatButtonModule,
+    RouterLink
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
   title = 'webkert-szonyeg-webshop';
-  page = "home";
-  changePage(selectedPage: string) {
-    this.page = selectedPage;
+  
+  onToggleSidenav(sidenav: MatSidenav) {
+    sidenav.toggle();
   }
 }
