@@ -6,10 +6,11 @@ import { ProductsComponent } from './pages/products/products.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { MenuComponent } from './shared/menu/menu.component';
+import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HomeComponent, LoginComponent, ProductsComponent, ProfileComponent, SignupComponent, MenuComponent],
+  imports: [RouterOutlet, HomeComponent, LoginComponent, ProductsComponent, ProfileComponent, SignupComponent, MenuComponent, PageNotFoundComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

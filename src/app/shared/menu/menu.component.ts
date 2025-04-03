@@ -8,9 +8,5 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './menu.component.scss'
 })
 export class MenuComponent {
-  @Output() selectedPage: EventEmitter<string> = new EventEmitter();
-
-  menuSwitch(pageValue: string) {
-    this.selectedPage.emit(pageValue);
-  }
+  
 }
