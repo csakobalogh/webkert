@@ -3,20 +3,26 @@
         <mat-icon matListItemIcon>home</mat-icon>
         <span matListItemTitle>Főoldal</span>
     </a>
-    <a mat-list-item routerLink="/login" routerLinkActive="active-list-item" (click)="closeMenu()">
-        <mat-icon matListItemIcon>login</mat-icon>
-        <span matListItemTitle>Bejelentkezés</span>
-    </a>
-    <a mat-list-item routerLink="/registration" routerLinkActive="active-list-item" (click)="closeMenu()">
-        <mat-icon matListItemIcon>app_registration</mat-icon>
-        <span matListItemTitle>Regisztráció</span>
-    </a>
-    <a mat-list-item routerLink="/profile" routerLinkActive="active-list-item" (click)="closeMenu()">
-        <mat-icon matListItemIcon>account_circle</mat-icon>
-        <span matListItemTitle>Profil</span>
-    </a>
     <a mat-list-item routerLink="/products" routerLinkActive="active-list-item" (click)="closeMenu()">
         <mat-icon matListItemIcon>inventory_2</mat-icon>
         <span matListItemTitle>Termékek</span>
     </a>
+    @if (isLoggedIn) {
+      <a mat-list-item routerLink="/profile" routerLinkActive="active-list-item" (click)="closeMenu()">
+        <mat-icon matListItemIcon>person</mat-icon>
+        <span matListItemTitle>Profil</span>
+      </a>
+    }
+    @if (!isLoggedIn) {
+      <a mat-list-item routerLink="/login" routerLinkActive="active-list-item" (click)="closeMenu()">
+        <mat-icon matListItemIcon>login</mat-icon>
+        <span matListItemTitle>Bejelentkezés</span>
+      </a>
+    }
+    @if (isLoggedIn) {
+      <a mat-list-item (click)="logout()">
+        <mat-icon matListItemIcon>logout</mat-icon>
+        <span matListItemTitle>Kijelentkezés</span>
+      </a>
+    }
 </mat-nav-list>

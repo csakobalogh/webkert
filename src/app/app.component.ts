@@ -1,30 +1,48 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, RouterOutlet, RouterLink } from '@angular/router';
 import { MenuComponent } from './shared/menu/menu.component';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
-import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterLink } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   imports: [
-    RouterOutlet, 
-    MenuComponent, 
+    CommonModule,
+    RouterOutlet,
     MatSidenavModule,
-    MatIconModule,
     MatToolbarModule,
     MatButtonModule,
-    RouterLink
+    MatIconModule,
+    RouterLink,
+    MenuComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
-  title = 'webkert-szonyeg-webshop';
-  
-  onToggleSidenav(sidenav: MatSidenav) {
+export class AppComponent implements OnInit {
+  title = 'learnflow';
+  isLoggedIn = false;
+
+  constructor() {}
+
+  ngOnInit(): void {
+    this.checkLoginStatus();
+  }
+
+  checkLoginStatus(): void {
+    this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  }
+
+  logout(): void {
+    localStorage.setItem('isLoggedIn', 'false');
+    this.isLoggedIn = false;
+    window.location.href = '/home';
+  }
+
+  onToggleSidenav(sidenav: MatSidenav){
     sidenav.toggle();
   }
 }
