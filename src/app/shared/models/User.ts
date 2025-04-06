@@ -1,3 +1,5 @@
+import { CartItem } from './CartItem';
+
 export interface User {
     name: {
       firstname: string;
@@ -5,4 +7,5 @@ export interface User {
     };
     email: string;
     password: string;
+    cartItems: CartItem[]; 
   }

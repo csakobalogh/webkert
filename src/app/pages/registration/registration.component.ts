@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { User } from '../../shared/models/User';
+import { CartItem } from '../../shared/models/CartItem';
 
 @Component({
   selector: 'app-signup',
@@ -63,7 +64,8 @@ export class RegistrationComponent {
         lastname: name?.lastname || ''
       },
       email: email || '',
-      password: password || ''
+      password: password || '',
+      cartItems: []
     };
 
     console.log('New user:', newUser);

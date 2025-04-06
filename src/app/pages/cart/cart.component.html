@@ -1,0 +1,27 @@
+@if (cartItems.length > 0) {
+  <div>
+    @for (item of cartItems; track item) {
+      <mat-card class="cart-item">
+        <img mat-card-image [src]="item.imageUrl" [alt]="item.name">
+        <mat-card-title>{{ item.name }}</mat-card-title>
+        <mat-card-content>
+            <strong>{{ item.price | currencyFormat }}</strong>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button color="warn" (click)="removeItem(item.id)">
+                <mat-icon>delete</mat-icon>
+                Eltávolítás a kosárból
+            </button>
+        </mat-card-actions>
+      </mat-card>
+    }
+    <div class="total">
+      <h3>Teljes ár: {{ totalAmount | currencyFormat }}</h3>
+    </div>
+    <button mat-raised-button color="accent" (click)="clearCart()">
+        <mat-icon>delete</mat-icon>
+        Kosár tartalmának törlése</button>
+  </div>
+} @else {
+  <p class="empty-cart">Üres a kosarad!</p>
+}

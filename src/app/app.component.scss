@@ -13,12 +13,6 @@ ul {
     gap: 30px;
 }
 
-a {
-    text-decoration: none;
-    color: white;
-    font-size: 25px;
-}
-
 mat-sidenav-container {
     height: 100%;
 }
@@ -28,12 +22,39 @@ mat-toolbar{
     color: white;
     mat-icon {
         color: white;
+        vertical-align: middle;
     }
 }
 
 mat-sidenav {
     border-radius: 0;
 }
+
+nav ul li {
+    display: flex;
+    align-items: center;
+  }
+  
+  nav ul li a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    gap: 8px;
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+    padding: 8px 0px;
+    border-radius: 4px;
+  }
+  
+  nav ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  mat-icon {
+    font-size: 22px;
+    vertical-align: middle;
+  }
 
 .menu-toggle-button {
     display: none;

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,15 +6,51 @@ import { MatIconModule } from '@angular/material/icon';
 import { Product } from '../../shared/models/Product';
 import { CurrencyFormatPipe } from "../../shared/pipes/currency-format.pipe";
 import { SizeFormatPipe } from "../../shared/pipes/size-format.pipe";
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, CurrencyFormatPipe, SizeFormatPipe],
+  imports: [
+    CommonModule, 
+    MatCardModule, 
+    MatButtonModule, 
+    MatIconModule, 
+    CurrencyFormatPipe, 
+    SizeFormatPipe,
+    RouterLink
+  ],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss'
 })
-export class ProductsComponent {
+export class ProductsComponent implements OnInit {
+  isLoggedIn = false;
+
+  constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  }
+
+  addToCart(product: Product): void {
+    const cartItem = {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      imageUrl: product.imageUrl
+    };
+
+    const existingCart = localStorage.getItem('cartItems');
+    const cartItems = existingCart ? JSON.parse(existingCart) : [];
+
+    if (!cartItems.some((item: { id: string; }) => item.id === cartItem.id)) {
+      cartItems.push(cartItem);
+    }
+
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    this.router.navigate(['/cart']);
+  }
+  
   products: Product[] = [
     {
       id: '1',
