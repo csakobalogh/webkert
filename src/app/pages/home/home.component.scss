@@ -9,6 +9,17 @@
     text-align: center;
 }
 
+.container-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.container img {
+    height: 100px;
+    width: auto;
+}
 
 p {
     color: #666;

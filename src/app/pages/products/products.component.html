@@ -1,1 +1,24 @@
-<p>products works!</p>
+<div class="products-container">
+  @if (products.length > 0) {
+    @for (product of products; track product) {
+      <mat-card class="product-card">
+        <img mat-card-image [src]="product.imageUrl" [alt]="product.name">
+        <mat-card-title>{{ product.name }}</mat-card-title>
+        <mat-card-content>
+          <p>{{ product.description }}</p>
+          <strong>{{ product.price | currencyFormat }}</strong>
+          <p><strong>Méret:</strong> {{ product.size }}</p>
+          <p><strong>Szín:</strong> {{ product.color }}</p>
+          <p><strong>Anyag:</strong> {{ product.material }}</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="primary">
+            <mat-icon>shopping_cart</mat-icon> Kosárba
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    }
+  } @else {
+    <p class="no-products">Jelenleg nincs elérhető termék.</p>
+  }
+</div>

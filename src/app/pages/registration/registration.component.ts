@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,7 +12,6 @@ import { User } from '../../shared/models/User';
   selector: 'app-signup',
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -21,7 +19,7 @@ import { User } from '../../shared/models/User';
     MatIconModule,
     MatProgressSpinnerModule,
     RouterLink
-  ],
+],
   templateUrl: './registration.component.html',
   styleUrl: './registration.component.scss'
 })
