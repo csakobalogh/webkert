@@ -5,11 +5,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Product } from '../../shared/models/Product';
 import { CurrencyFormatPipe } from "../../shared/pipes/currency-format.pipe";
+import { SizeFormatPipe } from "../../shared/pipes/size-format.pipe";
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, CurrencyFormatPipe],
+  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, CurrencyFormatPipe, SizeFormatPipe],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss'
 })

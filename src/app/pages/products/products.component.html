@@ -7,7 +7,7 @@
         <mat-card-content>
           <p>{{ product.description }}</p>
           <strong>{{ product.price | currencyFormat }}</strong>
-          <p><strong>Méret:</strong> {{ product.size }}</p>
+          <p><strong>Méret:</strong> {{ product.size | sizeFormat }}</p>
           <p><strong>Szín:</strong> {{ product.color }}</p>
           <p><strong>Anyag:</strong> {{ product.material }}</p>
         </mat-card-content>
