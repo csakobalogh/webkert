@@ -62,7 +62,38 @@ export class ProductsComponent implements OnInit {
   
     const average = sum / ratings.length;
     return Math.round(average * 10) / 10;
-  }  
+  }
+
+  isAddedToCart(product: Product): boolean {
+    const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+    return cartItems.some(this.isProductInCart.bind(this, product));
+  }
+  
+  isProductInCart(product: Product, item: { id: string }): boolean {
+    return item.id === product.id;
+  }
+
+  getTextDecorationStyle(product: Product): { [key: string]: string } {
+    let textColor = '';
+    let fontWeight = '';
+
+    // Apply contrasting colors based on price
+    if (product.price < 15000) {
+      textColor = 'green'; // For products below 15000
+      fontWeight = 'bold';  // Make the text bold
+    } else if (product.price >= 15000 && product.price < 25000) {
+      textColor = 'orange'; // For products between 15000 and 25000
+      fontWeight = 'bold';
+    } else {
+      textColor = 'red'; // For products above 25000
+      fontWeight = 'bold';
+    }
+
+    return {
+      'color': textColor,       // Set the text color
+      'font-weight': fontWeight, // Make the text bold for emphasis
+    };
+  }
   
   products: Product[] = [
     {

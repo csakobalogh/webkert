@@ -1,12 +1,14 @@
 <div class="products-container">
   @if (products.length > 0) {
     @for (product of products; track product) {
-      <mat-card class="product-card">
+      <mat-card class="product-card" [ngClass]="{ 'added-to-cart': isAddedToCart(product) }">
         <img mat-card-image [src]="product.imageUrl" [alt]="product.name">
         <mat-card-title>{{ product.name }}</mat-card-title>
         <mat-card-content>
-          <p>{{ product.description }}</p>
-          <strong>{{ product.price | currencyFormat }}</strong>
+          <p [ngStyle]="getTextDecorationStyle(product)">
+            {{ product.description }}
+          </p>
+          <p><strong>{{ product.price | currencyFormat }}</strong>
           <div class="rating">
             <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
               <mat-icon [class.filled]="star <= getAverageRating(product.ratings)">
