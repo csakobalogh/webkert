@@ -7,6 +7,14 @@
         <mat-card-content>
           <p>{{ product.description }}</p>
           <strong>{{ product.price | currencyFormat }}</strong>
+          <div class="rating">
+            <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+              <mat-icon [class.filled]="star <= getAverageRating(product.ratings)">
+                star
+              </mat-icon>
+            </ng-container>
+            <span class="rating-number">({{ getAverageRating(product.ratings) }})</span>
+          </div>          
           <p><strong>Méret:</strong> {{ product.size | sizeFormat }}</p>
           <p><strong>Szín:</strong> {{ product.color }}</p>
           <p><strong>Anyag:</strong> {{ product.material }}</p>

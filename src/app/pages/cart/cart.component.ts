@@ -33,11 +33,21 @@ export class CartComponent implements OnInit {
   }
 
   calculateTotal(): void {
-    this.totalAmount = this.cartItems.reduce((sum, item) => sum + item.price, 0);
-  }
+    let sum = 0;
+    for (let i = 0; i < this.cartItems.length; i++) {
+      sum += this.cartItems[i].price;
+    }
+    this.totalAmount = sum;
+  }  
 
   removeItem(itemId: string): void {
-    const updatedCart = this.cartItems.filter(item => item.id !== itemId);
+    const updatedCart = [];
+    for (let i = 0; i < this.cartItems.length; i++) {
+      const item = this.cartItems[i];
+      if (item.id !== itemId) {
+        updatedCart.push(item);
+      }
+    }
     localStorage.setItem('cartItems', JSON.stringify(updatedCart));
     this.loadCart();
   }

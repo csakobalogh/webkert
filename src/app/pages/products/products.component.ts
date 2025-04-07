@@ -7,6 +7,7 @@ import { Product } from '../../shared/models/Product';
 import { CurrencyFormatPipe } from "../../shared/pipes/currency-format.pipe";
 import { SizeFormatPipe } from "../../shared/pipes/size-format.pipe";
 import { Router, RouterLink } from '@angular/router';
+import { Rating } from '../../shared/models/Rating';
 
 @Component({
   selector: 'app-products',
@@ -50,6 +51,18 @@ export class ProductsComponent implements OnInit {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
     this.router.navigate(['/cart']);
   }
+
+  getAverageRating(ratings: Rating[]): number {
+    if (ratings.length === 0) return 0;
+  
+    let sum = 0;
+    for (let i = 0; i < ratings.length; i++) {
+      sum += ratings[i].value;
+    }
+  
+    const average = sum / ratings.length;
+    return Math.round(average * 10) / 10;
+  }  
   
   products: Product[] = [
     {
@@ -60,7 +73,12 @@ export class ProductsComponent implements OnInit {
       price: 19990,
       color: 'piros',
       material: 'juta/pamut',
-      imageUrl: 'assets/carpet_1.jpg'
+      imageUrl: 'assets/carpet_1.jpg',
+      ratings: [
+        { value: 4 },
+        { value: 4 },
+        { value: 3 }
+      ]
     },
     {
       id: '2',
@@ -70,7 +88,12 @@ export class ProductsComponent implements OnInit {
       price: 24990,
       color: 'kék',
       material: 'juta/pamut',
-      imageUrl: 'assets/carpet_2.jpg'
+      imageUrl: 'assets/carpet_2.jpg',
+      ratings: [
+        { value: 3 },
+        { value: 2 },
+        { value: 5 }
+      ]
     },
     {
       id: '3',
@@ -80,7 +103,12 @@ export class ProductsComponent implements OnInit {
       price: 17990,
       color: 'szürke',
       material: 'pamut',
-      imageUrl: 'assets/carpet_3.jpg'
+      imageUrl: 'assets/carpet_3.jpg',
+      ratings: [
+        { value: 3 },
+        { value: 4 },
+        { value: 5 }
+      ]
     },
     {
       id: '4',
@@ -90,7 +118,12 @@ export class ProductsComponent implements OnInit {
       price: 12990,
       color: 'többszínű',
       material: 'poliészter',
-      imageUrl: 'assets/carpet_4.jpg'
+      imageUrl: 'assets/carpet_4.jpg',
+      ratings: [
+        { value: 5 },
+        { value: 4 },
+        { value: 1 }
+      ]
     },
     {
       id: '5',
@@ -100,7 +133,12 @@ export class ProductsComponent implements OnInit {
       price: 21990,
       color: 'bézs',
       material: 'pamut',
-      imageUrl: 'assets/carpet_5.jpg'
+      imageUrl: 'assets/carpet_5.jpg',
+      ratings: [
+        { value: 2 },
+        { value: 4 },
+        { value: 1 }
+      ]
     },
     {
       id: '6',
@@ -110,7 +148,12 @@ export class ProductsComponent implements OnInit {
       price: 26990,
       color: 'fehér',
       material: 'mikroszálas poliészter',
-      imageUrl: 'assets/carpet_6.jpg'
+      imageUrl: 'assets/carpet_6.jpg',
+      ratings: [
+        { value: 3 },
+        { value: 4 },
+        { value: 3 }
+      ]
     }
   ];  
 }
