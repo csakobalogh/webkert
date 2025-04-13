@@ -10,13 +10,13 @@
           </p>
           <p><strong>{{ product.price | currencyFormat }}</strong>
           <div class="rating">
-            <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+            @for (star of [1, 2, 3, 4, 5]; track star) {
               <mat-icon [class.filled]="star <= getAverageRating(product.ratings)">
                 star
               </mat-icon>
-            </ng-container>
+            }
             <span class="rating-number">({{ getAverageRating(product.ratings) }})</span>
-          </div>          
+          </div>
           <p><strong>Méret:</strong> {{ product.size | sizeFormat }}</p>
           <p><strong>Szín:</strong> {{ product.color }}</p>
           <p><strong>Anyag:</strong> {{ product.material }}</p>
@@ -25,12 +25,12 @@
           @if (!isLoggedIn) {
             <button mat-raised-button color="primary" [routerLink]="['/login']">
               <mat-icon>shopping_cart</mat-icon> Kosárba
-            </button>        
+            </button>
           }
           @if (isLoggedIn) {
             <button mat-raised-button color="primary" (click)="addToCart(product)">
               <mat-icon>shopping_cart</mat-icon> Kosárba
-            </button>  
+            </button>
           }
         </mat-card-actions>
       </mat-card>
