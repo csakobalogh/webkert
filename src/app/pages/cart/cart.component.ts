@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import { CartItem } from '../../shared/models/CartItem';
 import { CurrencyFormatPipe } from "../../shared/pipes/currency-format.pipe";
+import { CartService } from '../../shared/services/cart.service';
 
 @Component({
   selector: 'app-cart',
@@ -19,17 +20,26 @@ import { CurrencyFormatPipe } from "../../shared/pipes/currency-format.pipe";
 export class CartComponent implements OnInit {
   cartItems: CartItem[] = [];
   totalAmount: number = 0;
+  userId: string | null = null;
 
-  constructor() {}
+  constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
+    this.userId = localStorage.getItem('userId');
     this.loadCart();
   }
 
   loadCart(): void {
-    const cartItems = localStorage.getItem('cartItems');
-    this.cartItems = cartItems ? JSON.parse(cartItems) : [];
-    this.calculateTotal();
+   if (!this.userId) {
+      this.cartItems = [];
+      this.totalAmount = 0;
+      return;
+    }
+
+    this.cartService.getCartItems(this.userId).subscribe(items => {
+      this.cartItems = items;
+      this.calculateTotal();
+    });
   }
 
   calculateTotal(): void {
@@ -40,20 +50,16 @@ export class CartComponent implements OnInit {
     this.totalAmount = sum;
   }  
 
-  removeItem(itemId: string): void {
-    const updatedCart = [];
-    for (let i = 0; i < this.cartItems.length; i++) {
-      const item = this.cartItems[i];
-      if (item.id !== itemId) {
-        updatedCart.push(item);
-      }
-    }
-    localStorage.setItem('cartItems', JSON.stringify(updatedCart));
+  async removeItem(itemId: string): Promise<void> {
+    if (!this.userId) return;
+
+    await this.cartService.removeFromCart(this.userId, itemId);
     this.loadCart();
   }
 
-  clearCart(): void {
-    localStorage.removeItem('cartItems');
+  async clearCart(): Promise<void> {
+    if (!this.userId) return;
+    await this.cartService.clearCart(this.userId);
     this.loadCart();
   }
 }

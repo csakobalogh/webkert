@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, collectionData, doc, setDoc, getDoc } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, doc, setDoc, getDoc, deleteDoc, query, writeBatch, getDocs } from '@angular/fire/firestore';
 import { CartItem } from '../models/CartItem';
 import { Observable } from 'rxjs';
 
@@ -26,5 +26,22 @@ export class CartService {
     if (!existingItem.exists()) {
       await setDoc(itemDoc, item);
     }
+  }
+
+  async removeFromCart(userId: string, itemId: string): Promise<void> {
+    const itemDoc = doc(this.firestore, `users/${userId}/cartitems/${itemId}`);
+    await deleteDoc(itemDoc);
+  }
+
+  async clearCart(userId: string): Promise<void> {
+    const cartCollection = this.getCartItemsCollection(userId);
+    const q = query(cartCollection);
+    const querySnapshot = await getDocs(q);
+
+    const batch = writeBatch(this.firestore);
+    querySnapshot.forEach(docSnap => {
+      batch.delete(docSnap.ref);
+    });
+    await batch.commit();
   }
 }
