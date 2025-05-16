@@ -32,11 +32,22 @@ export class AuthService {
     this.currentUser = authState(this.auth);
   }
   
-  signIn(email: string, password: string): Promise<UserCredential> {
-    return signInWithEmailAndPassword(this.auth, email, password);
+  async signIn(email: string, password: string): Promise<UserCredential> {
+  try {
+      const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
+
+      localStorage.setItem('userId', userCredential.user.uid);
+      localStorage.setItem('isLoggedIn', 'true');
+
+      return userCredential;
+    } catch (error) {
+      console.error('Hiba a bejelentkezés során:', error);
+      throw error;
+    }  
   }
   
   signOut(): Promise<void> {
+    localStorage.removeItem('userId');
     localStorage.setItem('isLoggedIn', 'false');
     return signOut(this.auth).then(() => {
       this.router.navigateByUrl('/home');
@@ -57,6 +68,9 @@ export class AuthService {
         email: email,
         cartItems: [],
       });
+
+      localStorage.setItem('userId', userCredential.user.uid);
+      localStorage.setItem('isLoggedIn', 'true');
 
       return userCredential;
     } catch (error) {

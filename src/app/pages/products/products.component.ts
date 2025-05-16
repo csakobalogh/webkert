@@ -9,6 +9,8 @@ import { SizeFormatPipe } from "../../shared/pipes/size-format.pipe";
 import { Router, RouterLink } from '@angular/router';
 import { Rating } from '../../shared/models/Rating';
 import { ProductService } from '../../shared/services/product.service';
+import { CartService } from '../../shared/services/cart.service';
+import { CartItem } from '../../shared/models/CartItem';
 
 @Component({
   selector: 'app-products',
@@ -26,34 +28,46 @@ import { ProductService } from '../../shared/services/product.service';
   styleUrl: './products.component.scss'
 })
 export class ProductsComponent implements OnInit {
+  userId: string = '';
   isLoggedIn = false;
   products: Product[] = [];
+  cartItems: CartItem[] = [];
 
-  constructor(private router: Router, private productService: ProductService) {}
+  constructor(
+    private router: Router, 
+    private productService: ProductService, 
+    private cartService: CartService
+  ) {}
 
-  ngOnInit(): void {
+   ngOnInit(): void {
     this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    this.userId = localStorage.getItem('userId') || '';
+
     this.productService.getAllProducts().subscribe(products => {
       this.products = products;
     });
+
+    if (this.isLoggedIn && this.userId) {
+      this.cartService.getCartItems(this.userId).subscribe(items => {
+        this.cartItems = items;
+      });
+    }
   }
 
-  addToCart(product: Product): void {
-    const cartItem = {
+   async addToCart(product: Product): Promise<void> {
+    if (!this.isLoggedIn || !this.userId) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    const cartItem: CartItem = {
       id: product.id,
       name: product.name,
       price: product.price,
       imageUrl: product.imageUrl
     };
 
-    const existingCart = localStorage.getItem('cartItems');
-    const cartItems = existingCart ? JSON.parse(existingCart) : [];
-
-    if (!cartItems.some((item: { id: string; }) => item.id === cartItem.id)) {
-      cartItems.push(cartItem);
-    }
-
-    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    await this.cartService.addToCart(this.userId, cartItem);
     this.router.navigate(['/cart']);
   }
 
@@ -70,8 +84,7 @@ export class ProductsComponent implements OnInit {
   }
 
   isAddedToCart(product: Product): boolean {
-    const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
-    return cartItems.some(this.isProductInCart.bind(this, product));
+    return this.cartItems.some(item => item.id === product.id);
   }
   
   isProductInCart(product: Product, item: { id: string }): boolean {
