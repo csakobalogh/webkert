@@ -11,17 +11,14 @@ export class ProductService {
 
   constructor(private firestore: Firestore) {}
 
-  // CREATE új termék
   async addProduct(product: Omit<Product, 'id'>): Promise<Product> {
     const productsCollection = collection(this.firestore, this.PRODUCTS_COLLECTION);
     const docRef = await addDoc(productsCollection, product);
     const id = docRef.id;
-    await updateDoc(docRef, { id }); // id mező hozzáadása a dokumentumhoz
-
+    await updateDoc(docRef, { id });
     return { ...product, id };
   }
 
-  // READ: összes termék
   getAllProducts(): Observable<Product[]> {
     const productsCollection = collection(this.firestore, this.PRODUCTS_COLLECTION);
     return from(getDocs(productsCollection)).pipe(
@@ -29,7 +26,6 @@ export class ProductService {
     );
   }
 
-  // READ egy termék ID alapján
   async getProductById(productId: string): Promise<Product | null> {
     const productDocRef = doc(this.firestore, this.PRODUCTS_COLLECTION, productId);
     const docSnap = await getDoc(productDocRef);
@@ -39,13 +35,11 @@ export class ProductService {
     return null;
   }
 
-  // UPDATE termék
   async updateProduct(productId: string, updatedData: Partial<Product>): Promise<void> {
     const productDocRef = doc(this.firestore, this.PRODUCTS_COLLECTION, productId);
     await updateDoc(productDocRef, updatedData);
   }
 
-  // DELETE termék
   async deleteProduct(productId: string): Promise<void> {
     const productDocRef = doc(this.firestore, this.PRODUCTS_COLLECTION, productId);
     await deleteDoc(productDocRef);

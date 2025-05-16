@@ -20,7 +20,6 @@ products$!: Observable<Product[]>;
 private auth = inject(Auth);
 isAdmin = false;
 
-  // Form adatai új termékhez (példa, egyszerűsített)
   newProduct: Omit<Product, 'id'> = {
     name: '',
     description: '',
@@ -32,7 +31,7 @@ isAdmin = false;
     ratings: []
   };
 
-  editingProduct: Product | null = null; // Szerkesztés alatt álló termék (ha van)
+  editingProduct: Product | null = null;
 
   constructor(private productService: ProductService) { }
 
@@ -50,7 +49,6 @@ isAdmin = false;
     this.products$ = this.productService.getAllProducts();
   }
 
-  // Új termék hozzáadása
   async addProduct() {
     try {
       const added = await this.productService.addProduct(this.newProduct);
@@ -62,7 +60,6 @@ isAdmin = false;
     }
   }
 
-  // Termék törlése
   async deleteProduct(id: string) {
     if (!confirm('Biztos törlöd a terméket?')) return;
     try {
@@ -74,12 +71,10 @@ isAdmin = false;
     }
   }
 
-  // Szerkesztés indítása
   startEdit(product: Product) {
     this.editingProduct = { ...product };
   }
 
-  // Szerkesztés mentése
   async saveEdit() {
     if (!this.editingProduct) return;
 

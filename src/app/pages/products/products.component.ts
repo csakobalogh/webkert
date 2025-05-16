@@ -8,6 +8,7 @@ import { CurrencyFormatPipe } from "../../shared/pipes/currency-format.pipe";
 import { SizeFormatPipe } from "../../shared/pipes/size-format.pipe";
 import { Router, RouterLink } from '@angular/router';
 import { Rating } from '../../shared/models/Rating';
+import { ProductService } from '../../shared/services/product.service';
 
 @Component({
   selector: 'app-products',
@@ -26,11 +27,15 @@ import { Rating } from '../../shared/models/Rating';
 })
 export class ProductsComponent implements OnInit {
   isLoggedIn = false;
+  products: Product[] = [];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private productService: ProductService) {}
 
   ngOnInit(): void {
     this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    this.productService.getAllProducts().subscribe(products => {
+      this.products = products;
+    });
   }
 
   addToCart(product: Product): void {
@@ -77,114 +82,20 @@ export class ProductsComponent implements OnInit {
     let textColor = '';
     let fontWeight = '';
 
-    // Apply contrasting colors based on price
     if (product.price < 15000) {
-      textColor = 'green'; // For products below 15000
-      fontWeight = 'bold';  // Make the text bold
+      textColor = 'green';
+      fontWeight = 'bold';
     } else if (product.price >= 15000 && product.price < 25000) {
-      textColor = 'orange'; // For products between 15000 and 25000
+      textColor = 'orange';
       fontWeight = 'bold';
     } else {
-      textColor = 'red'; // For products above 25000
+      textColor = 'red';
       fontWeight = 'bold';
     }
 
     return {
-      'color': textColor,       // Set the text color
-      'font-weight': fontWeight, // Make the text bold for emphasis
+      'color': textColor,
+      'font-weight': fontWeight,
     };
   }
-  
-  products: Product[] = [
-    {
-      id: '1',
-      name: 'Modern szőnyeg',
-      description: 'Stílusos és puha, tökéletes a nappaliba.',
-      size: '160x230',
-      price: 19990,
-      color: 'piros',
-      material: 'juta/pamut',
-      imageUrl: 'assets/carpet_1.jpg',
-      ratings: [
-        { value: 4 },
-        { value: 4 },
-        { value: 3 }
-      ]
-    },
-    {
-      id: '2',
-      name: 'Perzsa szőnyeg',
-      description: 'Klasszikus minta, prémium minőség.',
-      size: '120x180',
-      price: 24990,
-      color: 'kék',
-      material: 'juta/pamut',
-      imageUrl: 'assets/carpet_2.jpg',
-      ratings: [
-        { value: 3 },
-        { value: 2 },
-        { value: 5 }
-      ]
-    },
-    {
-      id: '3',
-      name: 'Skandináv szőnyeg',
-      description: 'Egyszerű, minimalista dizájn skandináv stílusban.',
-      size: '140x200',
-      price: 17990,
-      color: 'szürke',
-      material: 'pamut',
-      imageUrl: 'assets/carpet_3.jpg',
-      ratings: [
-        { value: 3 },
-        { value: 4 },
-        { value: 5 }
-      ]
-    },
-    {
-      id: '4',
-      name: 'Gyerekszőnyeg',
-      description: 'Vidám mintás szőnyeg a gyerekszobába.',
-      size: '100x150',
-      price: 12990,
-      color: 'többszínű',
-      material: 'poliészter',
-      imageUrl: 'assets/carpet_4.jpg',
-      ratings: [
-        { value: 5 },
-        { value: 4 },
-        { value: 1 }
-      ]
-    },
-    {
-      id: '5',
-      name: 'Vintage szőnyeg',
-      description: 'Kopott hatású vintage stílusú szőnyeg.',
-      size: '160x230',
-      price: 21990,
-      color: 'bézs',
-      material: 'pamut',
-      imageUrl: 'assets/carpet_5.jpg',
-      ratings: [
-        { value: 2 },
-        { value: 4 },
-        { value: 1 }
-      ]
-    },
-    {
-      id: '6',
-      name: 'Shaggy szőnyeg',
-      description: 'Extra puha, hosszú szálú shaggy szőnyeg.',
-      size: '150x200',
-      price: 26990,
-      color: 'fehér',
-      material: 'mikroszálas poliészter',
-      imageUrl: 'assets/carpet_6.jpg',
-      ratings: [
-        { value: 3 },
-        { value: 4 },
-        { value: 3 }
-      ]
-    }
-  ];  
 }
