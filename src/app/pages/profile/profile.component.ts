@@ -6,13 +6,16 @@ import { Subscription } from 'rxjs';
 import { UserService } from '../../shared/services/user.service';
 import { User } from '../../shared/models/User';
 import { CartItem } from '../../shared/models/CartItem';
+import { CartService } from '../../shared/services/cart.service';
+import { CurrencyFormatPipe } from "../../shared/pipes/currency-format.pipe";
 
 @Component({
   selector: 'app-profile',
   standalone: true,
   imports: [
     MatCardModule,
-    MatIconModule
+    MatIconModule,
+    CurrencyFormatPipe
 ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
@@ -25,32 +28,55 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription | null = null;
 
-  constructor(private userService: UserService) {}
-
-  ngOnInit(): void {
-    this.loadUserProfile();
-  }
-
+  constructor(private userService: UserService, private cartService: CartService) {}
   ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
+    throw new Error('Method not implemented.');
   }
 
-  loadUserProfile(): void {
+async ngOnInit() {
     this.isLoading = true;
 
-    this.subscription = this.userService.getUserProfile().subscribe({
-      next: (data) => {
-        this.user = data.user;
-        this.cartItems = data.cartItems;
-        this.totalItems = data.totalItems;
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Hiba a felhasználói profil betöltésekor:', error);
-        this.isLoading = false;
-      }
-    });
+    try {
+      const userId = localStorage.getItem('userId');
+      if (!userId) throw new Error('User not logged in');
+
+      // Felhasználó adatainak lekérése (ha szükséges)
+      this.user = await this.userService.getUserById(userId); // ezt tegyük hozzá lentebb
+
+      // Kosár elemek lekérése a CartService-ből
+      this.cartService.getCartItems(userId).subscribe({
+        next: (items) => {
+          this.cartItems = items;
+          this.totalItems = items.length;
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Hiba a kosár betöltésekor:', error);
+          this.isLoading = false;
+        }
+      });
+    } catch (error) {
+      console.error('Hiba a profil betöltésekor:', error);
+      this.isLoading = false;
+    }
   }
+
+//   loadUserProfile(): void {
+//     this.isLoading = true;
+
+//     this.subscription = this.userService.getUserProfile().subscribe({
+//   next: (data: { user: User | null; cartItems: CartItem[]; totalItems: number }) => {
+//     this.user = data.user;
+//     this.cartItems = data.cartItems;
+//     this.totalItems = data.totalItems;
+//     this.isLoading = false;
+//   },
+//   error: (error: any) => {
+//     console.error('Hiba a felhasználói profil betöltésekor:', error);
+//     this.isLoading = false;
+//   }
+// });
+//   }
 
   getUserInitials(): string {
     if (!this.user?.name) return '?';

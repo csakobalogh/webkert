@@ -10,7 +10,7 @@ export class CartService {
   constructor(private firestore: Firestore) {}
 
   private getCartItemsCollection(userId: string) {
-    return collection(this.firestore, `users/${userId}/cartitems`);
+    return collection(this.firestore, `Users/${userId}/cartItems`);
   }
 
   getCartItems(userId: string): Observable<CartItem[]> {
@@ -29,7 +29,7 @@ export class CartService {
   }
 
   async removeFromCart(userId: string, itemId: string): Promise<void> {
-    const itemDoc = doc(this.firestore, `users/${userId}/cartitems/${itemId}`);
+    const itemDoc = doc(this.firestore, `Users/${userId}/cartItems/${itemId}`);
     await deleteDoc(itemDoc);
   }
 
