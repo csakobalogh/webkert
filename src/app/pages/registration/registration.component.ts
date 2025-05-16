@@ -1,18 +1,20 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { User } from '../../shared/models/User';
-import { CartItem } from '../../shared/models/CartItem';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
   imports: [
+    CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -20,9 +22,9 @@ import { CartItem } from '../../shared/models/CartItem';
     MatIconModule,
     MatProgressSpinnerModule,
     RouterLink
-],
+  ],
   templateUrl: './registration.component.html',
-  styleUrl: './registration.component.scss'
+  styleUrls: ['./registration.component.scss']
 })
 export class RegistrationComponent {
   signUpForm: FormGroup;
@@ -30,7 +32,11 @@ export class RegistrationComponent {
   showForm = true;
   signupError = '';
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.signUpForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -44,35 +50,57 @@ export class RegistrationComponent {
 
   signup(): void {
     if (this.signUpForm.invalid) {
-      this.signupError = 'Kérlek, javítsd a hibákat a mezőkben!';
+      this.signupError = 'Please correct any errors on the form before submitting.';
       return;
     }
 
-    const { password, rePassword, email, name } = this.signUpForm.value;
+    const password = this.signUpForm.get('password')?.value;
+    const rePassword = this.signUpForm.get('rePassword')?.value;
 
     if (password !== rePassword) {
-      this.signupError = 'A jelszavak nem egyeznek meg.';
+      this.signupError = 'The passwords do not match.';
       return;
     }
 
     this.isLoading = true;
     this.showForm = false;
 
-    const newUser: User = {
+    const email = this.signUpForm.get('email')?.value;
+    const nameGroup = this.signUpForm.get('name')?.value;
+
+    const userData: Partial<User> = {
       name: {
-        firstname: name?.firstname || '',
-        lastname: name?.lastname || ''
+        firstname: nameGroup?.firstname || '',
+        lastname: nameGroup?.lastname || ''
       },
       email: email || '',
-      password: password || '',
       cartItems: []
     };
 
-    console.log('New user:', newUser);
-    console.log('Form value:', this.signUpForm.value);
+    this.authService.signUp(email, password, userData)
+      .then(userCredential => {
+        console.log('Registration successful:', userCredential.user);
+        this.authService.updateLoginStatus(true);
+        this.router.navigateByUrl('/home');
+      })
+      .catch(error => {
+        console.error('Registration error:', error);
+        this.isLoading = false;
+        this.showForm = true;
 
-    setTimeout(() => {
-      this.router.navigateByUrl('/home');
-    }, 300);
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            this.signupError = 'This email is already in use.';
+            break;
+          case 'auth/invalid-email':
+            this.signupError = 'Invalid email format.';
+            break;
+          case 'auth/weak-password':
+            this.signupError = 'Password is too weak. Use at least 6 characters.';
+            break;
+          default:
+            this.signupError = 'An error occurred during registration. Please try again later.';
+        }
+      });
   }
 }
