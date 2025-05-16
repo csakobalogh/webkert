@@ -1,0 +1,47 @@
+<h2>Termékek kezelése</h2>
+@if (isAdmin) {
+  <div>
+    <div class="new-product-form">
+      <h3>Új termék hozzáadása</h3>
+      <input type="text" placeholder="Név" [(ngModel)]="newProduct.name" />
+      <input type="text" placeholder="Leírás" [(ngModel)]="newProduct.description" />
+      <input type="text" placeholder="Méret" [(ngModel)]="newProduct.size" />
+      <input type="text" placeholder="Szín" [(ngModel)]="newProduct.color" />
+      <input type="text" placeholder="Anyag" [(ngModel)]="newProduct.material" />
+      <input type="number" placeholder="Ár" [(ngModel)]="newProduct.price" />
+      <input type="text" placeholder="Kép URL" [(ngModel)]="newProduct.imageUrl" />
+      <button (click)="addProduct()">Hozzáadás</button>
+    </div>
+    <h3>Terméklista</h3>
+    <ul>
+      @for (product of products$ | async; track product) {
+        <li>
+          @if (product) {
+            @if (editingProduct?.id !== product.id) {
+              <div>
+                <strong>{{ product.name }}</strong> - {{ product.price }} Ft
+                <button (click)="startEdit(product)">Szerkesztés</button>
+                <button (click)="deleteProduct(product.id)">Törlés</button>
+              </div>
+            }
+            @if (editingProduct; as e) {
+              <div>
+                <input [(ngModel)]="e.name" placeholder="Név" />
+                <input [(ngModel)]="e.description" placeholder="Leírás" />
+                <input [(ngModel)]="e.size" placeholder="Méret" />
+                <input [(ngModel)]="e.color" placeholder="Szín" />
+                <input [(ngModel)]="e.material" placeholder="Anyag" />
+                <input type="number" [(ngModel)]="e.price" placeholder="Ár" />
+                <input [(ngModel)]="e.imageUrl" placeholder="Kép URL" />
+                <button (click)="saveEdit()">Mentés</button>
+                <button (click)="cancelEdit()">Mégsem</button>
+              </div>
+            }
+          }
+        </li>
+      }
+    </ul>
+  </div>
+} @else {
+  <p>Nincs jogosultságod a termékek kezeléséhez.</p>
+}

@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard, publicGuard } from './shared/guards/auth/auth.guard';
+import { authGuard, publicGuard, adminGuard } from './shared/guards/auth/auth.guard';
 
 export const routes: Routes = [
     {
@@ -20,10 +20,15 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/profile/profile.component').then(m => m.ProfileComponent),
         canActivate: [authGuard]
     },
-    {
+     {
         path: 'login',
         loadComponent: () => import('./pages/login/login.component').then(m => m.LoginComponent),
         canActivate: [publicGuard]
+    },
+    {
+        path: 'product-manager',
+        loadComponent: () => import('./pages/product-manager/product-manager.component').then(m => m.ProductManagerComponent),
+        canActivate: [adminGuard]
     },
     {
         path: 'registration',

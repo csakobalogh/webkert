@@ -20,6 +20,7 @@ import { Subscription } from 'rxjs';
 export class MenuComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() sidenav!: MatSidenav;
   @Input() isLoggedIn: boolean = false;
+  @Input() isAdminUser: boolean = false;
   @Output() logoutEvent = new EventEmitter<void>();
 
   private authSubscription?: Subscription;
@@ -27,16 +28,20 @@ export class MenuComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.checkLoginStatus();
+    this.authSubscription = this.authService.currentUser.subscribe(user => {
+    const email = user?.email ?? null;
+    this.isLoggedIn = !!user;
+    this.isAdminUser = this.authService.isAdminUser(email);
+  });
   }
 
   checkLoginStatus(): void {
-    this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    this.authService.isLoggedIn();
   }
 
   ngAfterViewInit(): void {}
 
-ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.authSubscription?.unsubscribe();
   }
 

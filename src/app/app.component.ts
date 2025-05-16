@@ -25,6 +25,7 @@ import { Subscription } from 'rxjs';
 export class AppComponent implements OnInit, OnDestroy {
   title = 'learnflow';
   isLoggedIn = false;
+  isAdminUser = false;
   private authSubscription?: Subscription;
   
   constructor(private authService: AuthService) {}
@@ -33,6 +34,10 @@ export class AppComponent implements OnInit, OnDestroy {
     this.authSubscription = this.authService.currentUser.subscribe(user => {
       this.isLoggedIn = !!user;
       localStorage.setItem('isLoggedIn', this.isLoggedIn ? 'true' : 'false');
+    });
+    this.authService.currentUser.pipe().subscribe(user => {
+      const email = user?.email ?? null;
+      this.isAdminUser = this.authService.isAdminUser(email);
     });
   }
 

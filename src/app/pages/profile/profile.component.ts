@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { Subscription } from 'rxjs';
@@ -11,10 +11,9 @@ import { CartItem } from '../../shared/models/CartItem';
   selector: 'app-profile',
   standalone: true,
   imports: [
-    CommonModule,
     MatCardModule,
     MatIconModule
-  ],
+],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })

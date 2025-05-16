@@ -7,6 +7,12 @@
         <mat-icon matListItemIcon>inventory_2</mat-icon>
         <span matListItemTitle>Termékek</span>
     </a>
+    @if (isLoggedIn && isAdminUser) {
+      <a mat-list-item routerLink="/product-manager" routerLinkActive="active-list-item" (click)="closeMenu()">
+        <mat-icon matListItemIcon>inventory_2</mat-icon>
+        <span matListItemTitle>Termékek kezelése</span>
+      </a>
+    }
     @if (isLoggedIn) {
       <a mat-list-item routerLink="/cart" routerLinkActive="active-list-item" (click)="closeMenu()">
         <mat-icon matListItemIcon>shopping_cart</mat-icon>

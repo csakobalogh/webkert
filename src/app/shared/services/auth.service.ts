@@ -78,4 +78,8 @@ export class AuthService {
   updateLoginStatus(isLoggedIn: boolean): void {
     localStorage.setItem('isLoggedIn', isLoggedIn ? 'true' : 'false');
   }
+
+  isAdminUser(email: string | null): boolean {
+    return email?.includes('admin') ?? false;
+  }
 }

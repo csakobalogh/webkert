@@ -38,3 +38,24 @@ export const publicGuard: CanActivateFn = (route, state) => {
     })
   );
 };
+
+export const adminGuard: CanActivateFn = (route, state) => {
+  const router = inject(Router);
+  const authService = inject(AuthService);
+
+  return authService.currentUser.pipe(
+    take(1),
+    map(user => {
+      const email = user?.email ?? '';
+      const isAdmin = email.includes('admin');
+
+      if (isAdmin) {
+        return true;
+      }
+
+      console.log('Access denied - not admin');
+      router.navigate(['/unauthorized']);
+      return false;
+    })
+  );
+};
