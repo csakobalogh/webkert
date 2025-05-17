@@ -7,7 +7,6 @@ import { MatButtonModule } from '@angular/material/button';
   selector: 'app-page-not-found',
   imports: [
     RouterLink, 
-    // RouterLinkActive, 
     MatIconModule,
     MatButtonModule
   ],

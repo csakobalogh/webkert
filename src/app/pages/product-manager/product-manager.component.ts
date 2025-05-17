@@ -88,7 +88,6 @@ isAdmin = false;
     }
   }
 
-  // Szerkesztés megszakítása
   cancelEdit() {
     this.editingProduct = null;
   }

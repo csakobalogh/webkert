@@ -29,6 +29,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private subscription: Subscription | null = null;
 
   constructor(private userService: UserService, private cartService: CartService) {}
+  
   ngOnDestroy(): void {
     throw new Error('Method not implemented.');
   }
@@ -40,10 +41,8 @@ async ngOnInit() {
       const userId = localStorage.getItem('userId');
       if (!userId) throw new Error('User not logged in');
 
-      // Felhasználó adatainak lekérése (ha szükséges)
-      this.user = await this.userService.getUserById(userId); // ezt tegyük hozzá lentebb
+      this.user = await this.userService.getUserById(userId);
 
-      // Kosár elemek lekérése a CartService-ből
       this.cartService.getCartItems(userId).subscribe({
         next: (items) => {
           this.cartItems = items;
@@ -60,23 +59,6 @@ async ngOnInit() {
       this.isLoading = false;
     }
   }
-
-//   loadUserProfile(): void {
-//     this.isLoading = true;
-
-//     this.subscription = this.userService.getUserProfile().subscribe({
-//   next: (data: { user: User | null; cartItems: CartItem[]; totalItems: number }) => {
-//     this.user = data.user;
-//     this.cartItems = data.cartItems;
-//     this.totalItems = data.totalItems;
-//     this.isLoading = false;
-//   },
-//   error: (error: any) => {
-//     console.error('Hiba a felhasználói profil betöltésekor:', error);
-//     this.isLoading = false;
-//   }
-// });
-//   }
 
   getUserInitials(): string {
     if (!this.user?.name) return '?';
