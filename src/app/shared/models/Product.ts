@@ -10,4 +10,5 @@ export interface Product {
     price: number;
     imageUrl: string;
     ratings: Rating[];
+    avgRating?: number;
   }

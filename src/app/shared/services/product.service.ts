@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, doc, addDoc, updateDoc, deleteDoc, getDocs, query, getDoc, where, orderBy } from '@angular/fire/firestore';
+import { Firestore, collection, doc, addDoc, updateDoc, deleteDoc, getDocs, query, getDoc, where, orderBy, limit } from '@angular/fire/firestore';
 import { Observable, from, map } from 'rxjs';
 import { Product } from '../models/Product';
 
@@ -27,9 +27,16 @@ export class ProductService {
     if (!docSnap.exists()) throw new Error('Product not found');
 
     const productData = docSnap.data() as Product;
+
     const newRatings = productData.ratings ? [...productData.ratings, { value: ratingValue }] : [{ value: ratingValue }];
 
-    await updateDoc(productDocRef, { ratings: newRatings });
+    const total = newRatings.reduce((sum, r) => sum + r.value, 0);
+    const avg = Math.round((total / newRatings.length) * 10) / 10;
+
+    await updateDoc(productDocRef, {
+      ratings: newRatings,
+      avgRating: avg
+    });
   }
 
   // R
@@ -75,4 +82,33 @@ export class ProductService {
       map(snapshot => snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as Product)))
     );
   }
+
+  getCheapRugs(limitCount: number): Observable<Product[]> {
+    const productsRef = collection(this.firestore, this.PRODUCTS_COLLECTION);
+    const q = query(
+      productsRef,
+      where('price', '<=', 15000),
+      orderBy('price', 'asc'),
+      limit(limitCount)
+    );
+
+    return from(getDocs(q)).pipe(
+      map(snapshot => snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }) as Product))
+    );
+  }
+
+  getTopRatedRugs(): Observable<Product[]> {
+    const productsRef = collection(this.firestore, this.PRODUCTS_COLLECTION);
+    const q = query(
+      productsRef,
+      where('avgRating', '>=', 4),
+      orderBy('avgRating', 'desc'),
+      limit(10)
+    );
+
+    return from(getDocs(q)).pipe(
+      map(snapshot => snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }) as Product))
+    );
+  }
+
 }

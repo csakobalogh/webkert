@@ -1,22 +1,48 @@
 <div class="container">
   <div class="container-header">
-      <img src="assets/carpet.png">
-      <h1>Üdvözlünk az oldalon!</h1>
+    <img src="assets/carpet.png">
+    <h1>Üdvözlünk az oldalon!</h1>
   </div>
   <p>
-      Fedezd fel prémium minőségű szőnyegeinket, amelyek otthonodat
-      meleggé és stílusossá varázsolják! Válogass különböző méretek, 
-      minták és anyagok közül, és találd meg a tökéletes darabot!
+    Fedezd fel prémium minőségű szőnyegeinket, amelyek otthonodat
+    meleggé és stílusossá varázsolják! Válogass különböző méretek,
+    minták és anyagok közül, és találd meg a tökéletes darabot!
   </p>
   <p>
-      Böngéssz kínálatunkban, és tedd még otthonosabbá lakásod!
+    Böngéssz kínálatunkban, és tedd még otthonosabbá lakásod!
   </p>
 
   @if (!isLoggedIn) {
-      <button mat-flat-button color="accent" [routerLink]="['/login']" class="tasks">Bejelentkezés</button>
+    <button mat-flat-button color="accent" [routerLink]="['/login']" class="tasks">Bejelentkezés</button>
   }
-  
+
   @if (isLoggedIn) {
-      <button mat-flat-button color="accent" [routerLink]="['/profile']" class="tasks">Profilom</button>
+    <button mat-flat-button color="accent" [routerLink]="['/profile']" class="tasks">Profilom</button>
   }
+
+  <div class="section">
+    <h2>Olcsó szőnyegek</h2>
+    <div class="product-list">
+      @for (product of cheapRugs; track product) {
+        <div class="product-card">
+          <img [src]="product.imageUrl" alt="{{ product.name }}">
+          <h3>{{ product.name }}</h3>
+          <p>{{ product.price }} Ft</p>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Legjobbra értékelt szőnyegek</h2>
+    <div class="product-list">
+      @for (product of topRatedRugs; track product) {
+        <div class="product-card">
+            <img [src]="product.imageUrl" alt="{{ product.name }}">
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.price }} Ft ({{ product.avgRating ?? 'N/A' }})</p>
+        </div>
+      }
+    </div>
+  </div>
 </div>

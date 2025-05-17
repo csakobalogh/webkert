@@ -26,3 +26,14 @@ p {
     font-size: 20px;
     margin-bottom: 40px;
 }
+
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.product-card {
+  border-radius: 8px;
+  width: 200px;
+  text-align: center;
+}
