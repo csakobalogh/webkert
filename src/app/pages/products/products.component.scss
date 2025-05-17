@@ -59,4 +59,12 @@ mat-card-title {
   .product-card img {
     height: 150px;
   }
+}.rating span.filled,
+.rating-input span.selected {
+  color: gold;
+  cursor: pointer;
+}
+
+.rating-input span {
+  margin-right: 2px;
 }

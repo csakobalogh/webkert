@@ -32,6 +32,7 @@ export class ProductsComponent implements OnInit {
   isLoggedIn = false;
   products: Product[] = [];
   cartItems: CartItem[] = [];
+  selectedRatings: { [productId: string]: number } = {};
 
   constructor(
     private router: Router, 
@@ -54,6 +55,17 @@ export class ProductsComponent implements OnInit {
     }
   }
 
+  submitRating(product: Product): void {
+    const rating = this.selectedRatings[product.id];
+    if (!rating) return;
+
+    this.productService.addRating(product.id, rating).then(() => {
+      // Frissítés helyben
+      product.ratings.push({ value: rating });
+      this.selectedRatings[product.id] = 0;
+    }).catch(err => console.error('Hiba értékeléskor:', err));
+  }
+
    async addToCart(product: Product): Promise<void> {
     if (!this.isLoggedIn || !this.userId) {
       this.router.navigate(['/login']);
@@ -70,18 +82,23 @@ export class ProductsComponent implements OnInit {
     await this.cartService.addToCart(this.userId, cartItem);
     this.router.navigate(['/cart']);
   }
-
   getAverageRating(ratings: Rating[]): number {
-    if (ratings.length === 0) return 0;
+  if (!ratings || ratings.length === 0) return 0;
+  const sum = ratings.reduce((acc, r) => acc + r.value, 0);
+  return Math.round((sum / ratings.length) * 10) / 10;
+}
+
+  // getAverageRating(ratings: Rating[]): number {
+  //   if (ratings.length === 0) return 0;
   
-    let sum = 0;
-    for (let i = 0; i < ratings.length; i++) {
-      sum += ratings[i].value;
-    }
+  //   let sum = 0;
+  //   for (let i = 0; i < ratings.length; i++) {
+  //     sum += ratings[i].value;
+  //   }
   
-    const average = sum / ratings.length;
-    return Math.round(average * 10) / 10;
-  }
+  //   const average = sum / ratings.length;
+  //   return Math.round(average * 10) / 10;
+  // }
 
   isAddedToCart(product: Product): boolean {
     return this.cartItems.some(item => item.id === product.id);
