@@ -111,4 +111,20 @@ export class ProductService {
     );
   }
 
+  getMidRangeRugs(): Observable<Product[]> {
+    const productsCollection = collection(this.firestore, this.PRODUCTS_COLLECTION);
+
+    const q = query(
+      productsCollection,
+      where('price', '>=', 15000),
+      where('price', '<=', 25000),
+      orderBy('price', 'asc')
+    );
+
+    return from(getDocs(q)).pipe(
+      map(snapshot =>
+        snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as Product))
+      )
+    );
+  }
 }

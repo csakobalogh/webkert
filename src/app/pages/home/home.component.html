@@ -48,6 +48,15 @@
     </div>
   }
 
+  <h2>Középkategóriás szőnyegek</h2>
+  @for (product of midRangeRugs; track product) {
+    <div class="product-card">
+      <img [src]="product.imageUrl" alt="{{ product.name }}">
+      <h3>{{ product.name }}</h3>
+      <p>{{ product.price }} Ft ({{ product.avgRating ?? 'N/A' }})</p>
+    </div>
+  }
+
 
   <div class="section">
     <h2>Olcsó szőnyegek</h2>

@@ -17,6 +17,7 @@ export class HomeComponent implements OnInit {
   cheapRugs: Product[] = [];
   topRatedRugs: Product[] = [];
   colorFilteredRugs: Product[] = [];
+  midRangeRugs: Product[] = [];
 
   availableColors: string[] = ['piros', 'zöld', 'kék', 'barna', 'szürke'];
   selectedColor: string = '';
@@ -27,6 +28,7 @@ export class HomeComponent implements OnInit {
     this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     this.loadCheapRugs();
     this.loadTopRatedRugs();
+    this.loadMidRangeRugs();
   }
 
   onColorChange(): void {
@@ -34,7 +36,7 @@ export class HomeComponent implements OnInit {
       this.colorFilteredRugs = [];
       return;
     }
-    
+
     this.productService.getProductsByColorSortedByPrice(this.selectedColor)
       .subscribe(rugs => this.colorFilteredRugs = rugs);
   }
@@ -48,6 +50,12 @@ export class HomeComponent implements OnInit {
   loadTopRatedRugs(): void {
     this.productService.getTopRatedRugs().subscribe(products => {
       this.topRatedRugs = products;
+    });
+  }
+
+  loadMidRangeRugs(): void {
+    this.productService.getMidRangeRugs().subscribe(products => {
+      this.midRangeRugs = products;
     });
   }
 }
