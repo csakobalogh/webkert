@@ -22,13 +22,16 @@
 
   <h2>Szűrés szín szerint</h2>
 
-  <label for="color-select">Válassz színt:</label>
-  <select id="color-select" [(ngModel)]="selectedColor" (change)="onColorChange()">
-    <option value="">-- Válassz --</option>
-    @for (color of availableColors; track color) {
-      <option [value]="color">{{ color }}</option>
-    }
-  </select>
+  <form (ngSubmit)="onColorSubmit()" #colorForm="ngForm">
+    <label for="color-select">Válassz színt:</label>
+    <select id="color-select" name="color" [(ngModel)]="selectedColor" required>
+      <option value="">-- Válassz --</option>
+      @for (color of availableColors; track color) {
+        <option [value]="color">{{ color }}</option>
+      }
+    </select>
+    <button type="submit" mat-flat-button color="primary" [disabled]="!colorForm.form.valid">Szűrés</button>
+  </form>
 
   @if (colorFilteredRugs.length > 0) {
     <div class="products-grid">
@@ -42,21 +45,24 @@
     </div>
   }
 
-  @if (selectedColor && colorFilteredRugs.length === 0) {
+  @if (hasSearchedByColor && selectedColor && colorFilteredRugs.length === 0) {
     <div>
       <p>Nincs találat erre a színre.</p>
     </div>
   }
 
-  <h2>Középkategóriás szőnyegek</h2>
-  @for (product of midRangeRugs; track product) {
-    <div class="product-card">
-      <img [src]="product.imageUrl" alt="{{ product.name }}">
-      <h3>{{ product.name }}</h3>
-      <p>{{ product.price }} Ft ({{ product.avgRating ?? 'N/A' }})</p>
+  <div class="section">
+    <h2>Középkategóriás szőnyegek</h2>
+    <div class="product-list">
+      @for (product of midRangeRugs; track product) {
+        <div class="product-card">
+          <img [src]="product.imageUrl" alt="{{ product.name }}">
+          <h3>{{ product.name }}</h3>
+          <p>{{ product.price }} Ft ({{ product.avgRating ?? 'N/A' }})</p>
+        </div>
+      }
     </div>
-  }
-
+  </div>
 
   <div class="section">
     <h2>Olcsó szőnyegek</h2>

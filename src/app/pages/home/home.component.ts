@@ -18,7 +18,7 @@ export class HomeComponent implements OnInit {
   topRatedRugs: Product[] = [];
   colorFilteredRugs: Product[] = [];
   midRangeRugs: Product[] = [];
-
+  hasSearchedByColor: boolean = false;
   availableColors: string[] = ['piros', 'zöld', 'kék', 'barna', 'szürke'];
   selectedColor: string = '';
 
@@ -31,14 +31,16 @@ export class HomeComponent implements OnInit {
     this.loadMidRangeRugs();
   }
 
-  onColorChange(): void {
-    if (!this.selectedColor) {
-      this.colorFilteredRugs = [];
-      return;
-    }
+  onColorSubmit(): void {
+    this.hasSearchedByColor = true;
 
-    this.productService.getProductsByColorSortedByPrice(this.selectedColor)
-      .subscribe(rugs => this.colorFilteredRugs = rugs);
+    if (this.selectedColor) {
+      this.productService.getProductsByColorSortedByPrice(this.selectedColor).subscribe(products => {
+        this.colorFilteredRugs = products;
+      });
+    } else {
+      this.colorFilteredRugs = [];
+    }
   }
 
   loadCheapRugs(): void {
