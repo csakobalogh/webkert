@@ -1,5 +1,5 @@
 # Szőnyeg Webshop
-Belépéshez: test@gmail.com test
+Elered az admin funkciot (termekek kezelese), ha az `admin` szo szerepel az email cimben. Peldaul: `adminasd@gmail.com`
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.6.
 
